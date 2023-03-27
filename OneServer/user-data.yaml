@@ -1,0 +1,19 @@
+#cloud-config
+write_files:
+  - path: /var/lib/cloud/scripts/per-boot/01-run-react-website.sh
+    permissions: '0555'
+    content: |
+      #!/bin/bash
+      exec > /home/ubuntu/user-data.log 2>&1
+      curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      sudo apt update -y && sudo apt install yarn nodejs npm git -y
+      cd /home/ubuntu/
+      git clone https://gitlab.com/entsupml/skillbox-deploy-blue-green
+      cd /home/ubuntu/skillbox-deploy-blue-green/
+      npm install
+      myip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+      sudo npm install pm2 -g
+      export PORT=80
+      sed -i 's|Test of revert|'$myip'|g' src/App.js
+      yarn start &
