@@ -20,12 +20,13 @@ data "yandex_compute_image" "my-ubuntu-2004-1" {
 
 resource "yandex_compute_instance" "my-vm-1" {
   name        = "test-vm-1"
-  platform_id = "standard-v1"
+  platform_id = "standard-v2"
   zone        = "ru-central1-a"
 
   resources {
     cores  = 2
-    memory = 2
+    memory = 1
+    core_fraction = 20
   }
 
   boot_disk {
