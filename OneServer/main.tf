@@ -8,14 +8,14 @@ terraform {
 }
 
 provider "yandex" {
-  token     = "y0_AgAAAAACxHmGAATuwQAAAADxw6jVL0bHHjUoRa-6HyYoi3k5CWLdo0Q"
-  cloud_id  = "b1gsskde79n2qqttbjr7"
-  folder_id = "b1gcd0u555lhjecu216h"
+  token     = ""
+  cloud_id  = ""
+  folder_id = ""
   zone      = "ru-central1-a"
 }
 
-data "yandex_compute_image" "my-ubuntu-2004-1" {
-  family = "ubuntu-2004-lts"
+data "yandex_compute_image" "fd89cudngj3s2osr228p" {
+  family = "ubuntu-2204-lts"
 }
 
 resource "yandex_compute_instance" "my-vm-1" {
@@ -31,7 +31,7 @@ resource "yandex_compute_instance" "my-vm-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "${data.yandex_compute_image.my-ubuntu-2004-1.id}"
+      image_id = "${data.yandex_compute_image.fd89cudngj3s2osr228p.id}"
     }
   }
 
@@ -42,7 +42,7 @@ resource "yandex_compute_instance" "my-vm-1" {
 
   metadata = {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
-    user-data = "${file("./user-data.yaml")}"
+    user-data = "${file("./user-data.sh")}"
   }
 }
 

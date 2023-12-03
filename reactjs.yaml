@@ -3,7 +3,6 @@
 
   vars:
     project_path: /var/www
-    repository: https://gitlab.com/LaGGeR88/skillbox-depoly-blue-green
 
 
   tasks:
@@ -33,7 +32,12 @@
 
     - name: Install the packages YARN, NPM, NodeJS, Nginx, Git
       apt:
-        pkg: ['yarn', 'nodejs', 'nginx', 'git']
+        pkg:
+          - git
+          - yarn
+          - npm
+          - nodejs
+          - nginx
 
     - name: Delete the html file
       file:
@@ -44,6 +48,7 @@
       set_fact:
         release_path: "{{ project_path }}/releases/{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
         current_path: "{{ project_path }}/html"
+      tags: start_yarn
 
     - name: Create project path
       file:
@@ -68,7 +73,7 @@
 
     - name: Clone the repository
       git:
-        repo: "{{ repository }}"
+        repo: "https://gitlab.com/alexkopenkinspb/skillbox-deploy-blue-green.git"
         dest: "{{ release_path }}"
 
     - name: YARN install dependencies
